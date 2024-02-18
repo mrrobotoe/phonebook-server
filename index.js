@@ -5,8 +5,9 @@ const cors = require('cors');
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('dist'));
 
-morgan.token('body', function getBody (req) {
+morgan.token('body', function getBody(req) {
   return JSON.stringify(req.body);
 });
 
@@ -59,11 +60,10 @@ app.post('/api/persons', (request, response) => {
 
   if (!body.name) {
     return response.status(400).json({
-      error: "name is missing"
-    })
-  };
+      error: 'name is missing',
+    });
+  }
 
-  
   const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
 
   body.id = maxId + 1;
@@ -81,10 +81,10 @@ app.delete('/api/persons/:id', (request, response) => {
 });
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
+  response.status(404).send({ error: 'unknown endpoint' });
+};
 
-app.use(unknownEndpoint)
+app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3001;
 
